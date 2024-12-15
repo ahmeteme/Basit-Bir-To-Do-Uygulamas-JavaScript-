@@ -1,0 +1,47 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo Uygulaması</title>
+</head>
+<body>
+    <h1>Yapılacaklar Listesi</h1>
+    <input type="text" id="taskInput" placeholder="Bir görev gir..." />
+    <button onclick="addTask()">Ekle</button>
+    <ul id="taskList"></ul>
+
+    <script>
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.textContent = task;
+                li.onclick = () => {
+                    tasks.splice(index, 1);
+                    updateStorage();
+                };
+                taskList.appendChild(li);
+            });
+        }
+
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            if(input.value.trim() !== '') {
+                tasks.push(input.value.trim());
+                updateStorage();
+                input.value = '';
+            }
+        }
+
+        function updateStorage() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        renderTasks();
+    </script>
+</body>
+</html>
